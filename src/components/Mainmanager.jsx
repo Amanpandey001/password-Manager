@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Mainmanager = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +34,7 @@ const Mainmanager = () => {
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState);
         if (showIcon.current) {
-            showIcon.current.src = !showPassword ? '/hide.svg' : '/show.svg';
+            showIcon.current.src = showPassword ? '/show.svg' : '/hide.svg';
         }
     };
 
@@ -49,6 +51,15 @@ const Mainmanager = () => {
     };
 
     const handleDelete = (index) => {
+        toast('Password Deleted!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
         const newPassarr = [...passarr];
         newPassarr.splice(index, 1);
         setPassarr(newPassarr);
@@ -56,6 +67,15 @@ const Mainmanager = () => {
     };
 
     const addContent = () => {
+        toast('Password Added', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
         if (editIndex !== null) {
             const newPassarr = [...passarr];
             newPassarr[editIndex] = form;
@@ -78,6 +98,17 @@ const Mainmanager = () => {
 
     return (
         <div className='text-white p-3 md:h-[80%] h-[80%] w-[98%] md:w-[80%] mx-auto my-5'>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="dark"
+            />
             <div className='inputlabelkacss'>
                 <input value={form.website} onChange={handleChange} type='text' className='weburl inputs' placeholder='Website URL' name='website' id='weburl' />
             </div>
@@ -87,7 +118,7 @@ const Mainmanager = () => {
                 </div>
                 <div className='inputlabelkacss relative'>
                     <span className='absolute right-3 cursor-pointer' onClick={togglePasswordVisibility}>
-                        <img ref={showIcon} src="/show.svg" width={20} height={20} alt="Toggle visibility" />
+                        <img ref={showIcon} src={showPassword ? '/hide.svg' : '/show.svg'} width={20} height={20} alt="Toggle visibility" />
                     </span>
                     <input
                         type={showPassword ? 'text' : 'password'}
@@ -105,24 +136,24 @@ const Mainmanager = () => {
                     {editIndex !== null ? 'Update Password' : 'Add Password'}
                 </button>
             </div>
-            <div className='border sm:h-[70%] h-[55%] p-3 overflow-auto'>
+            <div className='sm:h-[70%] h-[55%] p-3 overflow-auto'>
                 <h1 className='text-center font-bold underline text-2xl mb-3'>Your Passwords</h1>
                 {passarr.length === 0 && <p className='text-center'>No Passwords</p>}
-                <table className='border border-violet-500  w-full'>
+                <table className='w-full text-center'>
                     <thead>
-                        <tr>
-                            <th className='border border-violet-500 '>Website</th>
-                            <th className='border border-violet-500 '>Username</th>
-                            <th className='border border-violet-500 '>Password</th>
-                            <th className='border border-violet-500 '>Edit</th>
+                        <tr className='bg-violet-500'>
+                            <th className='shadow-black shadow-xl'>Website</th>
+                            <th className='shadow-black shadow-xl'>Username</th>
+                            <th className='shadow-black shadow-xl'>Password</th>
+                            <th className='shadow-black shadow-xl'>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {passarr.map((item, index) => (
-                            <tr key={index}>
-                                <td className='border border-violet-500 '>{item.website}</td>
-                                <td className='border border-violet-500 '>{item.username}</td>
-                                <td className='border border-violet-500 '>{item.password}</td>
+                            <tr key={index} className='bg-violet-300 text-gray-900'>
+                                <td className='shadow-black shadow-xl'><a href={item.website} target="_blank" rel="noopener noreferrer">{item.website}</a></td>
+                                <td className='shadow-black shadow-xl'>{item.username}</td>
+                                <td className='shadow-black shadow-xl'>{item.password}</td>
                                 <td className='flex sm:justify-around justify-between items-center'>
                                     <button onClick={() => handleEdit(index)}><FaEdit size={20} /></button>
                                     <button onClick={() => handleDelete(index)}><MdDeleteOutline size={20} /></button>
